@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>六大理答策略</title>
+<meta name="description" content="國小學習共同體六大理答策略：轉引・轉問・反問・提示・釐清・深究——定義、引導語與課堂實例。內容整理自《學習領導下的學習共同體進階手冊 2.0 版》。">
+<style>
+:root{
+  --ink:#1E3329; --ink2:#2A4638; --green:#557327; --text:#43524A; --muted:#6B7A70;
+  --tag:#8A4B16; --cream:#F5F3EA; --card:#FBFAF5; --pale:#E9EEE0; --arrow:#9DB07E;
+  --lime:#C9DB8E; --mist:#D9E3D2; --sage:#A9BBA9; --line:#DCD8C8;
+  --pad-x:clamp(20px,5vw,72px); --pad-y:clamp(20px,4.5vh,56px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--ink)}
+body{font-family:"Microsoft JhengHei","PingFang TC","Noto Sans TC","Heiti TC",system-ui,sans-serif;
+  color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;overflow:hidden}
+
+/* ---------- 投影片框架 ---------- */
+.deck{position:fixed;inset:0}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--cream);
+  padding:var(--pad-y) var(--pad-x) calc(var(--pad-y) + 44px);overflow-y:auto;overscroll-behavior:contain;
+  opacity:0;visibility:hidden;transform:translateX(24px);transition:opacity .35s ease,transform .35s ease,visibility 0s .35s}
+.slide.on{opacity:1;visibility:visible;transform:none;transition:opacity .35s ease,transform .35s ease}
+.slide.back{transform:translateX(-24px)}
+.slide>.inner{width:100%;max-width:1120px;margin:auto;display:flex;flex-direction:column;gap:clamp(14px,2.4vh,26px)}
+.slide.dark{background:var(--ink);color:var(--mist)}
+.slide.pale{background:var(--pale)}
+
+.eyebrow{font-size:clamp(13px,1.3vw,16px);font-weight:700;color:var(--green);letter-spacing:.08em}
+.dark .eyebrow{color:var(--lime)}
+h1{font-size:clamp(36px,6.2vw,72px);line-height:1.2;font-weight:800;color:var(--cream)}
+h2{font-size:clamp(26px,3.6vw,44px);line-height:1.25;font-weight:800;color:var(--ink)}
+.dark h2{color:var(--cream)}
+.lead{font-size:clamp(16px,1.7vw,21px);color:var(--text)}
+.dark .lead{color:var(--mist)}
+.foot{font-size:clamp(12px,1.1vw,14px);color:var(--muted);border-top:1px solid var(--line);padding-top:10px;margin-top:auto}
+.dark .foot{color:var(--sage);border-color:#35503f}
+
+.card{background:var(--card);border-radius:14px;padding:clamp(16px,2.2vw,28px);box-shadow:0 1px 0 rgba(30,51,41,.06),0 6px 20px -12px rgba(30,51,41,.25)}
+.grid{display:grid;gap:clamp(12px,1.8vw,22px)}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+/* ---------- 1 封面 ---------- */
+.cover .inner{gap:clamp(12px,2.5vh,22px)}
+.cover .sub{font-size:clamp(16px,2vw,24px);color:var(--lime);font-weight:700}
+.cover .rule{width:72px;height:4px;background:var(--lime);border-radius:2px}
+.cover .src{font-size:clamp(13px,1.3vw,16px);color:var(--sage)}
+
+/* ---------- 2 流程 ---------- */
+.flow{display:flex;align-items:stretch;gap:10px}
+.flow .step{flex:1;display:flex;align-items:center;justify-content:center;min-height:64px;border-radius:10px;
+  background:var(--pale);font-weight:800;font-size:clamp(16px,1.9vw,22px);color:var(--ink)}
+.flow .step.hi{background:var(--ink);color:var(--cream)}
+.flow .arr{align-self:center;width:0;height:0;border-top:9px solid transparent;border-bottom:9px solid transparent;border-left:14px solid var(--arrow)}
+.do h3{font-size:clamp(20px,2.2vw,26px);color:var(--ink);margin-bottom:6px}
+.do h3.no{color:var(--tag)}
+.do p{font-size:clamp(15px,1.6vw,19px)}
+
+/* ---------- 3 六策略一覽 ---------- */
+.s6 .card{display:flex;flex-direction:column;gap:6px}
+.s6 .hd{display:flex;align-items:center;gap:14px}
+.num{flex:none;width:38px;height:38px;border-radius:50%;background:var(--green);color:#fff;font-weight:800;
+  display:flex;align-items:center;justify-content:center;font-size:18px}
+.s6 .name{font-size:clamp(24px,2.6vw,32px);font-weight:800;color:var(--ink)}
+.s6 .what{font-weight:700;color:var(--green);font-size:clamp(15px,1.5vw,18px)}
+.s6 .how{font-size:clamp(14px,1.4vw,16px);color:var(--muted)}
+
+/* ---------- 4–9 策略頁 ---------- */
+.strat{display:grid;grid-template-columns:minmax(0,.72fr) minmax(0,1fr);gap:clamp(18px,3vw,40px);align-items:start}
+.strat .left{display:flex;flex-direction:column;gap:12px}
+.strat .big{font-size:clamp(44px,6vw,76px);font-weight:800;color:var(--ink);line-height:1.05}
+.strat .link{font-size:clamp(16px,1.8vw,21px);font-weight:700;color:var(--green)}
+.strat .def{font-size:clamp(15px,1.55vw,18px)}
+.cue{background:var(--pale);border-radius:10px;padding:14px 18px;font-size:clamp(15px,1.5vw,18px);color:var(--ink)}
+.cue b{color:var(--green)}
+.chips{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.chips span{background:var(--pale);border-radius:8px;padding:9px 12px;font-size:clamp(14px,1.4vw,16px)}
+.chips b{color:var(--ink);margin-right:.5em}
+.case .ctx{font-weight:700;color:var(--green);font-size:clamp(14px,1.4vw,16px);margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.dlg{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 14px;font-size:clamp(14.5px,1.45vw,17px)}
+.who{font-weight:800;white-space:nowrap;padding:1px 9px;border-radius:6px;height:fit-content;font-size:.9em}
+.who.t{background:var(--ink);color:var(--cream)}
+.who.s{background:var(--mist);color:var(--ink)}
+.dlg .act{grid-column:2;color:var(--muted);font-style:normal}
+.dlg .t+div{color:var(--ink)}
+.mark{color:var(--tag);font-weight:700}
+.moral{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-weight:700;color:var(--ink);font-size:clamp(15px,1.5vw,18px)}
+
+/* ---------- 10 易混淆 ---------- */
+.vs .card{display:flex;flex-direction:column;gap:8px}
+.vs h3{font-size:clamp(20px,2.3vw,28px);color:var(--ink)}
+.vs .key{font-weight:700;color:var(--green);font-size:clamp(14px,1.45vw,17px)}
+.vs p{font-size:clamp(14.5px,1.45vw,17px)}
+.vs p b{color:var(--ink)}
+
+/* ---------- 11 練功房 ---------- */
+.url{display:block;background:var(--cream);color:var(--ink);border-radius:12px;padding:clamp(14px,2.2vw,24px);
+  text-align:center;font-weight:800;font-size:clamp(20px,3.2vw,40px);text-decoration:none;word-break:break-all}
+.url:hover{background:#fff}
+.steps .card{background:var(--ink2);box-shadow:none;color:var(--mist)}
+.steps b{display:block;color:var(--lime);font-size:clamp(20px,2.2vw,26px);margin-bottom:4px}
+
+/* ---------- 12 收尾 ---------- */
+.quote{font-size:clamp(28px,4.4vw,54px);font-weight:800;color:var(--ink);line-height:1.35}
+.quote span{color:var(--green)}
+
+/* ---------- 導覽 ---------- */
+.bar{position:fixed;left:0;right:0;bottom:0;height:44px;display:flex;align-items:center;gap:6px;
+  padding:0 max(10px,env(safe-area-inset-right)) env(safe-area-inset-bottom) max(10px,env(safe-area-inset-left));
+  background:rgba(245,243,234,.92);backdrop-filter:blur(6px);border-top:1px solid var(--line);z-index:10;transition:background .3s}
+.bar.dk{background:rgba(30,51,41,.92);border-color:#35503f}
+.bar button{font:inherit;border:0;background:transparent;color:var(--ink);cursor:pointer;min-width:40px;height:34px;
+  border-radius:8px;font-size:15px;padding:0 10px}
+.bar.dk button{color:var(--mist)}
+.bar button:hover{background:rgba(85,115,39,.14)}
+.bar button:focus-visible{outline:2px solid var(--green);outline-offset:1px}
+.bar .count{font-variant-numeric:tabular-nums;font-size:14px;color:var(--muted);min-width:56px;text-align:center}
+.bar.dk .count{color:var(--sage)}
+.bar .sp{flex:1}
+.prog{position:fixed;left:0;top:0;height:3px;background:var(--green);z-index:11;transition:width .35s ease}
+.notes{position:fixed;left:0;right:0;bottom:44px;max-height:38vh;overflow:auto;background:#fffdf6;color:var(--text);
+  border-top:2px solid var(--green);padding:14px var(--pad-x);font-size:clamp(14px,1.4vw,16px);z-index:9;
+  box-shadow:0 -10px 30px -16px rgba(0,0,0,.35);display:none}
+.notes.on{display:block}
+.notes b{color:var(--green);margin-right:.5em}
+.help{font-size:12px;color:var(--muted)}
+.bar.dk .help{color:var(--sage)}
+
+/* ---------- 窄螢幕 ---------- */
+@media (max-width:860px){
+  .strat{grid-template-columns:1fr}
+  .g3{grid-template-columns:1fr 1fr}
+  .vs.g3{grid-template-columns:1fr}
+}
+@media (max-width:620px){
+  .g2,.g3{grid-template-columns:1fr}
+  .flow{flex-direction:column}
+  .flow .arr{border-left:9px solid transparent;border-right:9px solid transparent;border-top:12px solid var(--arrow);border-bottom:0}
+  .flow .step{min-height:48px}
+  .s6.g3{grid-template-columns:1fr 1fr}
+  .s6 .how{display:none}
+  .help{display:none}
+}
+@media (max-width:380px){ .s6.g3{grid-template-columns:1fr} .s6 .how{display:block} }
+@media (prefers-reduced-motion:reduce){ .slide,.prog{transition:none!important;transform:none!important} }
+
+/* ---------- 列印：每頁一張 ---------- */
+@media print{
+  @page{size:16in 9in;margin:0}
+  html,body{height:auto;overflow:visible;background:#fff}
+  .deck{position:static}
+  .slide{position:relative;opacity:1;visibility:visible;transform:none;height:9in;page-break-after:always;overflow:hidden}
+  .bar,.prog,.notes{display:none!important}
+}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<main class="deck" id="deck">
+
+<!-- 1 -->
+<section class="slide dark cover" data-notes="這份簡報整理進階手冊 2.0 對「理答」的定義與六大策略，每個策略都附一段國小課堂實例。最後一頁可以直接到理答練功房開口練習。">
+  <div class="inner">
+    <div class="eyebrow">學習共同體 · 理答</div>
+    <h1>國小學習共同體<br>六大理答策略</h1>
+    <div class="rule"></div>
+    <p class="sub">轉引・轉問・反問・提示・釐清・深究——定義、引導語與課堂實例</p>
+    <p class="src">內容整理自《學習領導下的學習共同體進階手冊 2.0 版》</p>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="slide" data-notes="手冊把有效提問拆成四要項，理答是最後一步。重點在「串聯」：不是老師接住答案然後評分，而是把答案交出去，讓它跟別人的想法、跟教材連起來。手冊的說法是把教學從平面提升為師、生、教材、活動之間對話的 4D 立體空間。">
+  <div class="inner">
+    <div class="eyebrow">理答是什麼</div>
+    <h2>理答的本質，是串聯</h2>
+    <p class="lead">理答＝教師在學生提出答案或作答之後的處理方式，是引導學生探究與對話的關鍵一環。</p>
+    <div class="flow" aria-label="提問四要項">
+      <div class="step">問題編製</div><i class="arr"></i>
+      <div class="step">提問</div><i class="arr"></i>
+      <div class="step">候答</div><i class="arr"></i>
+      <div class="step hi">理答</div>
+    </div>
+    <div class="grid g2 do">
+      <div class="card"><h3 class="no">避免</h3><p>用「很好！」「對！」這類簡單評價，迅速把發言權收回老師手上。</p></div>
+      <div class="card"><h3>要做</h3><p>穿針引線，把「師—生、生—生、生—教材」的思考編織在一起。</p></div>
+    </div>
+    <p class="foot">提問四要項：問題編製、提問、候答、理答｜進階手冊 2.0</p>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="slide" data-notes="六個策略的差別，可以先抓「串聯了誰」：轉引串起多位學生的不同想法，轉問串起學生與學生，反問串起學生與自己，提示串起舊經驗，釐清串起老師與學生，深究則是對同一位學生往下挖深。">
+  <div class="inner">
+    <h2>六大理答策略一覽</h2>
+    <div class="grid g3 s6">
+      <a class="card" href="#4" style="text-decoration:none;color:inherit"><div class="hd"><span class="num">1</span><span class="name">轉引</span></div><div class="what">串聯學生不同的思考</div><div class="how">收集多元視點，先不評判</div></a>
+      <a class="card" href="#5" style="text-decoration:none;color:inherit"><div class="hd"><span class="num">2</span><span class="name">轉問</span></div><div class="what">串聯學生與學生</div><div class="how">把問題交給其他同學</div></a>
+      <a class="card" href="#6" style="text-decoration:none;color:inherit"><div class="hd"><span class="num">3</span><span class="name">反問</span></div><div class="what">串聯學生與自己</div><div class="how">把問題還給提問的人</div></a>
+      <a class="card" href="#7" style="text-decoration:none;color:inherit"><div class="hd"><span class="num">4</span><span class="name">提示</span></div><div class="what">串聯舊經驗</div><div class="how">給線索，不給答案</div></a>
+      <a class="card" href="#8" style="text-decoration:none;color:inherit"><div class="hd"><span class="num">5</span><span class="name">釐清</span></div><div class="what">串聯教師與學生</div><div class="how">把模糊的話說得精確</div></a>
+      <a class="card" href="#9" style="text-decoration:none;color:inherit"><div class="hd"><span class="num">6</span><span class="name">深究</span></div><div class="what">串聯與深化教材</div><div class="how">對同一人層層追問</div></a>
+    </div>
+    <p class="foot">接下來六頁，每個策略一頁：定義、常用引導語、國小課例</p>
+  </div>
+</section>
+
+<!-- 4 轉引 -->
+<section class="slide" data-notes="關鍵在老師的兩次回應都只「命名」學生的觀點，不下評價，然後繼續收集。三種視點累積起來之後，老師才拋出更深的問題，讓全班帶著不同角度去討論阿權複雜的心理。">
+  <div class="inner">
+    <div class="strat">
+      <div class="left">
+        <div class="eyebrow">策略一 · 高原策略</div>
+        <div class="big">轉引</div>
+        <div class="link">串聯學生不同的思考</div>
+        <p class="def">拋出開放性問題，連續請至少 3 位學生發表不同意見，過程中不急著評「對、錯、好、壞」。累積多樣的視點、形成思考的高原後，再提出更深一層的問題。</p>
+        <div class="cue"><b>引導語</b><br>「還有沒有其他想法？」<br>「我們多了一個＿＿的角度。」</div>
+      </div>
+      <div class="card case">
+        <div class="ctx">國小四年級國語｜《小狐狸阿權》第六場面</div>
+        <div class="dlg">
+          <span class="who t">師</span><div>阿權為什麼每天都要偷偷送栗子和松茸給兵十？</div>
+          <span class="who s">生 A</span><div>他之前偷走兵十要給生病媽媽吃的魚，想要彌補。</div>
+          <span class="who t">師</span><div>小敏覺得是「彌補歉疚」。還有沒有其他想法？</div>
+          <span class="who s">生 B</span><div>兵十現在也孤單一個人，阿權覺得同病相憐。</div>
+          <span class="who t">師</span><div>我們多了一個「孤單共鳴」的角度。還有沒有不同的原因？</div>
+          <span class="who s">生 C</span><div>他覺得自己是壞狐狸，怕兵十更討厭他。</div>
+          <span class="who t">師</span><div><span class="mark">【拋出深層問題】</span>既然阿權這麼渴望被原諒，為什麼到最後都不敢現身？</div>
+        </div>
+      </div>
+    </div>
+    <p class="foot">理答六策略 · 01 / 06</p>
+  </div>
+</section>
+
+<!-- 5 轉問 -->
+<section class="slide" data-notes="老師沒有自己回答小齊的疑惑，而是把問題交給小安。答案由同學說出來之後，老師再用一個問句把它串回「分數要看整體」這個概念。">
+  <div class="inner">
+    <div class="strat">
+      <div class="left">
+        <div class="eyebrow">策略二</div>
+        <div class="big">轉問</div>
+        <div class="link">串聯學生與學生之間的思考</div>
+        <p class="def">學生回應後，老師不直接回饋，而是請其他同學表達意見；學生主動發問時，把問題轉拋給其他同學，讓生生之間直接對話與探究。</p>
+        <div class="cue"><b>引導語</b><br>「○○，你對剛才小華的發言有不同的想法嗎？」</div>
+      </div>
+      <div class="card case">
+        <div class="ctx">國小三年級數學｜〈分數的初步認識〉</div>
+        <div class="dlg">
+          <span class="who s">生 D</span><div>老師，大偉分到的 1/2 張披薩比我的 1/2 還大，這不公平！同樣是 1/2，為什麼大小不一樣？</div>
+          <span class="who t">師</span><div>小安，你對剛才小齊的問題，看法是什麼？你覺得為什麼會這樣？</div>
+          <span class="who s">生 E</span><div>因為他們原本拿的披薩就不一樣大！超級大披薩的一半，當然比個人小披薩的一半大啊！</div>
+          <span class="who t">師</span><div><span class="mark">【串聯】</span>所以我們講分數「幾分之幾」的時候，不能只看那個分數，還要先注意什麼前提？</div>
+        </div>
+      </div>
+    </div>
+    <p class="foot">理答六策略 · 02 / 06</p>
+  </div>
+</section>
+
+<!-- 6 反問 -->
+<section class="slide" data-notes="學生問的是一個很好的問題，老師最省事的做法是直接解釋。但老師選擇把問題丟回去，並且用學生自己的經驗當鷹架。最後的領悟是從學生嘴裡說出來的。">
+  <div class="inner">
+    <div class="strat">
+      <div class="left">
+        <div class="eyebrow">策略三 · 反思策略</div>
+        <div class="big">反問</div>
+        <div class="link">串聯學生與自己的思考</div>
+        <p class="def">學生主動向老師發問時，老師不直接提供答案，而是反問提問的學生，促使他對自己的疑問進行省察與自我探究。</p>
+        <div class="cue"><b>引導語</b><br>「你自己的看法呢？」<br>「你想要如何解決？」</div>
+      </div>
+      <div class="card case">
+        <div class="ctx">國小六年級國語｜林良〈不要怕失敗〉</div>
+        <div class="dlg">
+          <span class="who s">生 F</span><div>課文說樂觀進取的人「希望失敗的經驗越多越好」。可是失敗明明讓人很傷心，這不是很奇怪嗎？</div>
+          <span class="who t">師</span><div>那回想一下你自己的經驗呢？上次數學考壞了，考壞之後你發現了什麼？沒有那次考壞，你會知道自己記錯乘法嗎？</div>
+          <span class="who s">生 F</span><div>考壞後，我才發現一直記錯 7×8，才趕快改過來。失敗好像真的讓我發現自己不懂的地方。</div>
+        </div>
+        <p class="moral">答案是學生自己找到的——老師只是把問題還給他。</p>
+      </div>
+    </div>
+    <p class="foot">理答六策略 · 03 / 06</p>
+  </div>
+</section>
+
+<!-- 7 提示 -->
+<section class="slide" data-notes="提示的難處在份量：給太多就是講答案，給太少學生繼續卡。這個例子老師只給了兩個關鍵詞，證明的動作仍然由學生自己完成。">
+  <div class="inner">
+    <div class="strat">
+      <div class="left">
+        <div class="eyebrow">策略四 · 搭建鷹架</div>
+        <div class="big">提示</div>
+        <div class="link">串聯舊經驗</div>
+        <p class="def">學生遇到高難度問題卡關、答不出，或小組陷入迷思時，老師不急著公布解答，而是給予和舊經驗、手邊工具或直觀操作相關的暗示。</p>
+        <div class="cue"><b>引導語</b><br>「這和我們之前學過的＿＿有沒有關係？」</div>
+      </div>
+      <div class="card case">
+        <div class="ctx">國小五年級數學｜〈多邊形內角和〉</div>
+        <div class="dlg">
+          <span class="who t">師</span><div>三角形三個內角加起來，為什麼一定是 180 度？我們要怎麼向別人證明？</div>
+          <div class="act">（全班想了整整 5 分鐘，面面相覷）</div>
+          <span class="who t">師</span><div>這和我們之前學過的「平角」有沒有關係？如果用抽屜裡的彩紙、剪刀和量角器實作看看，可以怎麼做？</div>
+          <span class="who s">生 G</span><div class="act" style="grid-column:auto">（剪下三角形底邊的兩個角，貼在頂角兩側，拼成一個平角）</div>
+        </div>
+        <p class="moral">兩個線索：一個舊經驗（平角），一個動手的許可（工具）。</p>
+      </div>
+    </div>
+    <p class="foot">理答六策略 · 04 / 06</p>
+  </div>
+</section>
+
+<!-- 8 釐清 -->
+<section class="slide" data-notes="學生的描述有畫面但不精確。老師用「所以你的話表示……對不對？」重述並確認，最後由學生自己說「對」並補上理由。可以和大家討論：老師重述時加進了學生沒說過的站名與路線名，這一步的份量怎麼拿捏？">
+  <div class="inner">
+    <div class="strat">
+      <div class="left">
+        <div class="eyebrow">策略五</div>
+        <div class="big">釐清</div>
+        <div class="link">串聯教師與學生之間的思考</div>
+        <p class="def">學生的表達模糊、斷續或不精確時，老師給予重述、澄清與確認，幫學生釐清自己的想法，並引向更具體、更精細的思考。</p>
+        <div class="cue"><b>引導語</b><br>「所以你的話表示……」<br>「換句話說……對不對？」</div>
+      </div>
+      <div class="card case">
+        <div class="ctx">國小四年級社會｜〈家鄉的交通工具〉</div>
+        <div class="dlg">
+          <span class="who s">生 H</span><div>要從學校去木柵動物園，就是先坐門口那台紅色的大公車，坐很久，再換那個咖啡色的捷運就會到了。</div>
+          <span class="who t">師</span><div>所以你的話表示：我們要先搭學校門口的「幹線公車」到科技大樓站，再轉乘「文湖線捷運」，對不對？</div>
+          <span class="who s">生 H</span><div>對！捷運圖上文湖線真的是咖啡色的，那台公車真的很紅！</div>
+        </div>
+        <p class="moral">把「紅色大公車」「咖啡色捷運」這些直觀語言，轉成全班共用的精確說法。</p>
+      </div>
+    </div>
+    <p class="foot">理答六策略 · 05 / 06</p>
+  </div>
+</section>
+
+<!-- 9 深究 -->
+<section class="slide" data-notes="同一位學生被追問三次，每次都往前推一格：從「保護地球」這種大話，推到具體的海龜、推到現實的顧慮、再推到兩難的取捨。原課例最後學生提出「以價制量＋補助研發可分解環保袋」的方案。">
+  <div class="inner">
+    <div class="strat">
+      <div class="left">
+        <div class="eyebrow">策略六 · 尖峰策略</div>
+        <div class="big">深究</div>
+        <div class="link">串聯與深化教材之學習</div>
+        <p class="def">針對同一位學生，陸續提出環環相扣、層層遞進的追問，把學習推向尖峰。</p>
+        <div class="chips">
+          <span><b>延伸</b>補充理由</span><span><b>證實</b>依據、例子</span>
+          <span><b>比較</b>與他人意見對照</span><span><b>綜合</b>總結討論結果</span>
+        </div>
+      </div>
+      <div class="card case">
+        <div class="ctx">國小六年級自然｜〈全球暖化與生態保護〉</div>
+        <div class="dlg">
+          <span class="who t">師</span><div>小毅，你覺得為什麼要減少使用一次性塑膠袋？</div>
+          <span class="who s">生 I</span><div>可以減少垃圾，保護地球。</div>
+          <span class="who t">師</span><div><span class="mark">【延伸】</span>塑膠袋變多，會對海裡的海龜造成什麼具體危害？</div>
+          <span class="who s">生 I</span><div>海龜會把塑膠袋當成水母吃下去，消化不了就餓死了。</div>
+          <span class="who t">師</span><div><span class="mark">【證實】</span>傷害這麼大，為什麼還是不停生產？人們的顧慮是什麼？</div>
+          <span class="who s">生 I</span><div>因為便宜又方便，突然不准用，商家會覺得生意變差。</div>
+          <span class="who t">師</span><div><span class="mark">【比較與綜合】</span>如果你是市長，怎麼在「生態保護」和「生活便利」之間找到平衡？</div>
+        </div>
+      </div>
+    </div>
+    <p class="foot">理答六策略 · 06 / 06</p>
+  </div>
+</section>
+
+<!-- 10 易混淆 -->
+<section class="slide pale" data-notes="這三組是實際練習時最常混的。釐清與深究的分界最重要：「再說一次」是釐清；「換一種方式再說一次」「不要用算式再說一次」要的是新的東西，屬於深究。提示與代答的分界則在老師有沒有把答案內容講出來。">
+  <div class="inner">
+    <h2>三組容易混淆的理答</h2>
+    <div class="grid g3 vs">
+      <div class="card"><h3>轉引 vs 轉問</h3><div class="key">看「話交給誰、交出去做什麼」</div>
+        <p><b>轉引：</b>同一個問題，收集多位學生的不同想法，先不評判。</p>
+        <p><b>轉問：</b>把某位學生的發言或疑問，交給另一位同學回應。</p></div>
+      <div class="card"><h3>釐清 vs 深究</h3><div class="key">看「要的是什麼」</div>
+        <p><b>釐清：</b>要同一份內容說得更清楚。「再說一次。」</p>
+        <p><b>深究：</b>要多出來的內容——理由、依據、比較。「為什麼？」</p></div>
+      <div class="card"><h3>提示 vs 代答</h3><div class="key">看「最後一步是誰走的」</div>
+        <p><b>提示：</b>給線索，縮短距離，最後一步留給學生。</p>
+        <p>老師把答案說完、學生只需說「對」——那已經是<b>代答</b>了。</p></div>
+    </div>
+    <p class="foot">分辨的關鍵：同一句話，換一個對象、換一個時間點，可能就換了策略</p>
+  </div>
+</section>
+
+<!-- 11 練功房 -->
+<section class="slide dark" data-notes="網站上有多張情境卡，上方選卡列可切換：釐清＋深究、轉引、轉問、反問、提示，以及串聯。學生講到一半、講完或講錯時，你的下一句會決定接下來發生什麼。系統只辨識你用了哪個策略，不替你的選擇打分數；每一條路都會播出學生的回應，並提供另一條路的對照。練習紀錄只存在自己的瀏覽器裡。">
+  <div class="inner">
+    <div class="eyebrow">動手練</div>
+    <h2>理答練功房：說出你的下一句</h2>
+    <p class="lead">面對一段五年級數學課堂情境，戴上耳機、對著麥克風說出你的理答。系統辨識你用了哪個策略，並播放學生接下來的回應。</p>
+    <a class="url" href="https://slc-answering.web.app" target="_blank" rel="noopener">https://slc-answering.web.app</a>
+    <div class="grid g3 steps">
+      <div class="card"><b>① 聽</b>學生說了一句還沒講完的話</div>
+      <div class="card"><b>② 說</b>說出你的理答，或選擇等待</div>
+      <div class="card"><b>③ 對照</b>聽聽另一種理答會走到哪裡</div>
+    </div>
+    <p class="foot">錄音只用來轉成文字，轉完立刻刪除，不會存到任何地方｜建議使用 Chrome，並允許麥克風</p>
+  </div>
+</section>
+
+<!-- 12 收尾 -->
+<section class="slide" data-notes="收尾時可以邀請大家回到練功房實際說一次。讀過策略跟說得出口是兩回事，理答要練到變成肌肉記憶。">
+  <div class="inner">
+    <div class="eyebrow">最後</div>
+    <p class="quote">理答不是替學生把話說完，<br><span>而是把思考交還給學生。</span></p>
+    <p class="lead">轉引、轉問、反問、提示、釐清、深究——六種方法，做的都是同一件事：串聯。</p>
+    <p class="foot">資料來源：《學習領導下的學習共同體進階手冊 2.0 版》｜練習：slc-answering.web.app</p>
+  </div>
+</section>
+
+</main>
+
+<aside class="notes" id="notes" aria-live="polite"></aside>
+<nav class="bar" id="bar" aria-label="簡報導覽">
+  <button id="prev" aria-label="上一頁">◀</button>
+  <span class="count" id="count">1 / 12</span>
+  <button id="next" aria-label="下一頁">▶</button>
+  <span class="sp"></span>
+  <span class="help">←→ 翻頁｜N 講者備註｜F 全螢幕</span>
+  <button id="btnNotes" aria-pressed="false">備註</button>
+  <button id="btnFull" aria-label="全螢幕">⛶</button>
+</nav>
+
+<script>
+(function(){
+  var slides=[].slice.call(document.querySelectorAll(".slide"));
+  var n=slides.length, cur=0;
+  var $=function(id){return document.getElementById(id)};
+  var notes=$("notes"), bar=$("bar");
+  var notesOn=false;
+  try{notesOn=localStorage.getItem("slc-deck-notes")==="1"}catch(e){}
+
+  function go(i,fromHash){
+    i=Math.max(0,Math.min(n-1,i));
+    slides.forEach(function(s,k){
+      s.classList.toggle("on",k===i);
+      s.classList.toggle("back",k<i);
+      s.setAttribute("aria-hidden",k===i?"false":"true");
+      s.inert = k!==i;
+    });
+    cur=i;
+    slides[i].scrollTop=0;
+    $("count").textContent=(i+1)+" / "+n;
+    $("prog").style.width=((i+1)/n*100)+"%";
+    bar.classList.toggle("dk",slides[i].classList.contains("dark"));
+    notes.innerHTML="<b>講者備註</b>"+(slides[i].dataset.notes||"（無）");
+    if(!fromHash) history.replaceState(null,"","#"+(i+1));
+  }
+  function setNotes(on){
+    notesOn=on; notes.classList.toggle("on",on);
+    $("btnNotes").setAttribute("aria-pressed",on?"true":"false");
+    try{localStorage.setItem("slc-deck-notes",on?"1":"0")}catch(e){}
+  }
+  function full(){
+    if(!document.fullscreenElement){ (document.documentElement.requestFullscreen||function(){}).call(document.documentElement); }
+    else document.exitFullscreen();
+  }
+
+  $("prev").onclick=function(){go(cur-1)};
+  $("next").onclick=function(){go(cur+1)};
+  $("btnNotes").onclick=function(){setNotes(!notesOn)};
+  $("btnFull").onclick=full;
+
+  document.addEventListener("keydown",function(e){
+    if(e.altKey||e.ctrlKey||e.metaKey) return;
+    var k=e.key;
+    if(k==="ArrowRight"||k==="PageDown"||(k===" "&&!e.shiftKey)){e.preventDefault();go(cur+1)}
+    else if(k==="ArrowLeft"||k==="PageUp"||(k===" "&&e.shiftKey)){e.preventDefault();go(cur-1)}
+    else if(k==="Home"){go(0)} else if(k==="End"){go(n-1)}
+    else if(k==="n"||k==="N"){setNotes(!notesOn)}
+    else if(k==="f"||k==="F"){full()}
+  });
+
+  // 觸控滑動：水平位移夠大且大於垂直位移才翻頁，不干擾頁內上下捲動
+  var sx=0,sy=0;
+  document.addEventListener("touchstart",function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+  document.addEventListener("touchend",function(e){
+    var dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5) go(cur+(dx<0?1:-1));
+  },{passive:true});
+
+  function fromHash(){ var h=parseInt(location.hash.slice(1),10); go(isNaN(h)?0:h-1,true); }
+  window.addEventListener("hashchange",fromHash);
+  setNotes(notesOn);
+  fromHash();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{
+  "_note": "選卡列的清單。加卡＝在這裡加一筆、放 cards/<id>.json、audio/<id>/，後端放 functions/cards/<id>.json＋.md",
+  "cards": [
+    {
+      "id": "c01",
+      "title": "聽不懂的那句話",
+      "focus": "釐清＋深究"
+    },
+    {
+      "id": "c02",
+      "title": "題目給了哪些線索？",
+      "focus": "轉引"
+    },
+    {
+      "id": "c03",
+      "title": "你聽到小靚說的嗎？",
+      "focus": "轉問"
+    },
+    {
+      "id": "c04",
+      "title": "先算什麼？",
+      "focus": "反問"
+    },
+    {
+      "id": "c05",
+      "title": "是「度」嗎？",
+      "focus": "提示"
+    },
+    {
+      "id": "c06",
+      "title": "哪裡不一樣？",
+      "focus": "串聯（轉問）"
+    }
+  ]
+}

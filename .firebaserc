@@ -1,0 +1,18 @@
+{
+  "projects": {
+    "default": "slc-die-mode"
+  },
+  "targets": {
+    "slc-die-mode": {
+      "hosting": {
+        "answering": [
+          "slc-answering"
+        ],
+        "slides": [
+          "slc-answering-slides"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

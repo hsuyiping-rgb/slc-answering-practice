@@ -1,0 +1,30 @@
+{
+  "_note": "情境卡 C06〈哪裡不一樣？〉判定器測試集。小妃講完她的算法後，小賢說「我們直接用 120 公升乘以 30」，兩種算法的差異還沒有人說出來。取自或改寫自 503 f3 06:26–07:46（段落 M）。本卡要驗的是串聯由誰來做：轉問（交給小妃或全班比較）與代答（老師自己說出差異）的界線；以及提示必須對著小賢本人、深究與釐清的辨別。",
+  "cases": [
+    {"id": 1, "input": "小妃，你聽得出小賢跟你哪裡不一樣嗎？", "expect": {"strategy": "轉問", "flags": {"gives_answer": false}, "branch": "B1"}, "hard": true, "note": "本卡核心：把比較交給小妃"},
+    {"id": 2, "input": "誰可以說說看，小賢的算法跟小妃的哪裡不一樣？", "expect": {"strategy": "轉問", "branch": "B1"}, "hard": true, "note": "交給全班，但參照了兩人的內容——轉問，不是轉引"},
+    {"id": 3, "input": "小妃，你覺得小賢的算法跟你一樣嗎？", "expect": {"strategy": "轉問", "branch": "B1"}, "hard": true},
+    {"id": 4, "input": "小賢說直接用 120 公升乘以 30，大家聽得出來他跟小妃差在哪裡嗎？", "expect": {"strategy": "轉問", "flags": {"gives_answer": false}, "branch": "B1"}, "hard": true, "note": "複述小賢說過的字不算代答"},
+    {"id": 5, "input": "講得很好。小妃，你覺得他跟你哪裡不一樣？", "expect": {"strategy": "轉問", "flags": {"is_evaluative": true}, "branch": "B1"}, "hard": true, "note": "負向樣本：先蓋章再轉問，flag 必中"},
+    {"id": 6, "input": "小妃是先算一天的錢再乘 30，小賢是先算一個月的水量再換成度，所以兩個不一樣。", "expect": {"strategy": "代答", "flags": {"gives_answer": true}, "branch": "B5"}, "hard": true, "note": "老師自己串聯——差異由老師說出來"},
+    {"id": 7, "input": "你的意思是先算一個月的水量，最後才換成度，對不對？", "expect": {"strategy": "代答", "flags": {"gives_answer": true}, "branch": "B5"}, "hard": true, "note": "確認句型，但「一個月的水量」「最後才換成度」小賢沒說過"},
+    {"id": 8, "input": "所以你乘出來是 3600 公升，對吧？", "expect": {"strategy": "代答", "flags": {"gives_answer": true}, "branch": "B5"}, "hard": true},
+    {"id": 9, "input": "算完什麼？", "expect": {"strategy": "深究", "branch": "B2"}, "hard": true, "source": "f3 06:53 原句", "note": "要比剛才更多的內容——深究，不是釐清"},
+    {"id": 10, "input": "120 公升乘以 30，算出來的是什麼？", "expect": {"strategy": "深究", "branch": "B2"}, "hard": true},
+    {"id": 11, "input": "你說什麼乘以 30？我沒聽清楚。", "expect": {"strategy": "釐清", "branch": "B3"}, "hard": true},
+    {"id": 12, "input": "你確定可以直接乘以 30 嗎？", "expect": {"strategy": "反問", "branch": "B4"}, "hard": true},
+    {"id": 13, "input": "小賢，你看一下你的算式跟小妃的，你們是在哪一步換成度的？", "expect": {"strategy": "提示", "flags": {"gives_answer": false, "returns_to_text": true}, "branch": "B6"}, "hard": true, "note": "對著小賢本人、指出要比較的位置，沒說誰先誰後"},
+    {"id": 14, "input": "還有沒有不一樣的算法？", "expect": {"strategy": "轉引", "branch": "B7"}, "hard": true},
+    {"id": 15, "input": "好，很好。", "expect": {"strategy": "其他", "flags": {"is_evaluative": true}, "branch": "RETRY"}, "hard": true},
+    {"id": 16, "input": null, "llm": false, "expect": {"branch": "WAIT"}, "hard": true},
+    {"id": 17, "input": "多少什麼？", "expect": {"strategy_in": ["深究", "釐清"]}, "hard": false, "source": "f3 07:08 原句", "note": "參考指標：要他補上單位（更多內容）傾向深究；只有三個字，釐清也說得通"}
+  ],
+  "gates": [
+    {"name": "第 1–5 題轉問必中（本卡核心）", "ids": [1, 2, 3, 4, 5]},
+    {"name": "第 6–8 題代答必中（老師自己串聯）", "ids": [6, 7, 8]},
+    {"name": "第 13 題提示必中、且不可被判代答", "ids": [13]},
+    {"name": "第 9–12、14 題深究／釐清／反問／轉引基本辨識", "ids": [9, 10, 11, 12, 14]},
+    {"name": "第 5、15 題評價語必中（負向樣本）", "ids": [5, 15]},
+    {"name": "第 16 題 WAIT", "ids": [16]}
+  ]
+}

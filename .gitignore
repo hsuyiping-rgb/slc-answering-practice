@@ -1,0 +1,42 @@
+desktop.ini
+*.tmp
+~$*
+.env
+.env.*
+*.key
+credentials.*
+secrets.*
+.claude/
+.codex/
+node_modules/
+.firebase/
+firebase-config.js
+# 大型影片不進版控；學生語音 mp3 是部署必需的產出資產，要進版控
+*.mp4
+*.mov
+
+# Python
+__pycache__/
+*.pyc
+
+# TTS 試打樣本（挑定音色後可刪）
+tts/samples/
+
+# 試聽頁是衍生物（內嵌 base64＝把 mp3 存兩份），用 tts/make_preview.py 重生
+public/audio/*/試聽.html
+firebase-debug.log
+firebase-debug.*.log
+.runtimeconfig.json
+functions/venv/
+
+# emulator 用的本機金鑰（firebase 官方慣例檔名）
+functions/.secret.local
+
+# 使用者本人的錄音不進版控（2026-09-23 已從歷史移除）。清單與期望值仍保留，可照 錄音清單.md 重錄
+judge/recordings/*.wav
+judge/recordings/*.m4a
+judge/recordings/*.mp3
+judge/recordings/*/
+
+# tts/rebuild.py 的逐段驗證紀錄
+tts/rebuild_*.log

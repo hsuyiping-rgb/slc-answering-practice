@@ -1,0 +1,89 @@
+:root{
+  --bg:#faf9f7;--fg:#1c1b19;--mut:#6b6863;--card:#fff;--line:#e5e2dc;
+  --accent:#3f6f52;--accent-soft:#e6efe9;--rec:#b4423a;--rec-soft:#f7e6e4;
+  --l1:#3b5b8a;--l1-soft:#e8eef7;--l2:#8a6a2f;--l2-soft:#f6efe1;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#17181a;--fg:#e9e7e3;--mut:#9a968f;--card:#1f2124;--line:#33363a;
+  --accent:#8fbfa2;--accent-soft:#233229;--rec:#e07b73;--rec-soft:#3a2523;
+  --l1:#8fb0e0;--l1-soft:#22293a;--l2:#d4b070;--l2-soft:#332c1f;
+}}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--fg)}
+body{padding:24px 16px 60px;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;line-height:1.75;font-size:16px}
+.wrap{max-width:680px;margin:0 auto}
+.top{margin-bottom:20px}
+.eyebrow{color:var(--accent);font-size:.85rem;letter-spacing:.08em}
+h1{font-size:1.55rem;margin:2px 0 4px;font-weight:700}
+.src{color:var(--mut);font-size:.82rem;margin:0}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.intro p{margin:0 0 .5em}
+.intro p:last-child{margin:0}
+.hint{color:var(--mut);font-size:.85rem;margin:8px 0 0}
+.err{color:var(--rec);font-size:.9rem}
+.actions{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin-top:14px}
+.actions.center{justify-content:center;margin:22px 0 10px}
+.btn{font:inherit;font-size:.95rem;padding:10px 18px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--fg);cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ghost{background:transparent}
+.btn.danger{color:var(--rec)}
+.btn[disabled]{opacity:.5;cursor:default}
+.speaker{font-weight:700;color:var(--accent);font-size:.9rem;margin-bottom:2px}
+.line{white-space:pre-line;font-size:1.15rem;line-height:1.9;padding-left:14px;border-left:3px solid var(--accent-soft)}
+.playing{color:var(--mut);font-size:.85rem;margin-top:10px}
+
+/* 老師回合：只顯示秒數，不做倒數、不做進度條 */
+.teacher{border-color:var(--rec)}
+.turn-label{font-weight:700;margin-bottom:6px}
+.elapsed{font-size:2.4rem;font-variant-numeric:tabular-nums;color:var(--mut);margin:4px 0 10px}
+.elapsed span{color:var(--fg)}
+.rec-row{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.btn.stop{background:var(--rec-soft);border-color:var(--rec);color:var(--rec);font-weight:700}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--rec);margin-right:8px;animation:blink 1.2s infinite}
+@keyframes blink{50%{opacity:.25}}
+.redline{margin:0;font-size:.88rem;color:var(--rec);max-width:320px;line-height:1.5}
+.busy{color:var(--mut)}
+.busy::after{content:"";display:inline-block;width:1em;text-align:left;animation:dots 1.5s steps(4) infinite}
+@keyframes dots{to{content:"..."}}
+
+/* 兩層回饋：顏色、標籤、邊線都不同，視覺上分開 */
+.wait-fb{background:var(--accent-soft);border-color:transparent}
+.layer-tag{font-size:.78rem;letter-spacing:.1em;font-weight:700;margin-bottom:10px}
+.layer1{border-left:5px solid var(--l1);background:var(--l1-soft)}
+.layer1 .layer-tag{color:var(--l1)}
+.layer2{border-left:5px solid var(--l2);background:var(--l2-soft)}
+.layer2 .layer-tag{color:var(--l2)}
+.layer2 .speaker{color:var(--l2)}
+.layer2 .line{border-left-color:var(--l2)}
+.verdict{font-size:1.2rem;font-weight:700;margin:0 0 6px}
+.evidence{margin:0 0 6px}
+.evidence q{font-weight:700}
+.note{margin:0;color:var(--mut)}
+.mismatch{margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.consequence{white-space:pre-line;margin-top:12px}
+.contrast{margin-top:16px;padding-top:14px;border-top:1px dashed var(--l2)}
+.contrast-head{font-size:.85rem;color:var(--mut);margin-bottom:6px}
+.example{margin:12px 0;padding:10px 14px;background:var(--card);border-radius:8px}
+.example div{margin:2px 0}
+.example b{color:var(--l1);margin-right:.5em}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{font:inherit;font-size:.9rem;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);cursor:pointer}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.mock{border-style:dashed}
+.mock label{display:block;margin:8px 0;font-size:.9rem}
+.mock input[type=text],.mock input:not([type]){width:100%;font:inherit;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
+
+.log summary{cursor:pointer;font-weight:700}
+.count{color:var(--mut);font-weight:400;font-size:.9rem}
+.stats{margin:10px 0 0;padding:0;list-style:none}
+.stats li{display:flex;gap:10px;align-items:center;font-size:.92rem;margin:4px 0}
+.stats .bar{height:8px;background:var(--accent);border-radius:4px;min-width:2px}
+.stats .k{width:3.2em}
+.stats .v{color:var(--mut)}
+.foot{color:var(--mut);font-size:.82rem;text-align:center;margin-top:30px}
+/* 選卡列 */
+.picker{margin:0 0 18px}
+.picker a.chip{text-decoration:none;color:inherit}
+.picker a.chip.on{color:#fff;cursor:default}

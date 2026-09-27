@@ -1,0 +1,213 @@
+{
+  "_note": "情境卡 C04〈先算什麼？〉判定器測試集。小宇剛答「省下多少……水費。」（明確但與解題順序不符的主張）。題目取自或改寫自 503 f2 02:00–02:30。本卡要驗的是未驗證風險 #3：反問／深究／釐清／轉問的辨別。",
+  "cases": [
+    {
+      "id": 1,
+      "input": "水費？水費還是水量？",
+      "expect": {
+        "strategy": "反問",
+        "flags": {
+          "gives_answer": false
+        },
+        "branch": "B6"
+      },
+      "source": "f2 02:13 原句",
+      "hard": true,
+      "note": "句中出現正確答案「水量」，但是並排丟回去讓學生自己選——不可判代答"
+    },
+    {
+      "id": 2,
+      "input": "你確定是水費嗎？",
+      "expect": {
+        "strategy": "反問",
+        "branch": "B6"
+      },
+      "hard": true
+    },
+    {
+      "id": 3,
+      "input": "水費？",
+      "expect": {
+        "strategy": "反問",
+        "branch": "B6"
+      },
+      "hard": true,
+      "note": "只重複學生答案加問號"
+    },
+    {
+      "id": 4,
+      "input": "為什麼要先算水費？",
+      "expect": {
+        "strategy": "深究",
+        "branch": "B2"
+      },
+      "hard": true,
+      "note": "要理由 → 深究，不是反問"
+    },
+    {
+      "id": 5,
+      "input": "你是從題目哪裡看出來要先算水費的？",
+      "expect": {
+        "strategy": "深究",
+        "branch": "B2"
+      },
+      "hard": true
+    },
+    {
+      "id": 6,
+      "input": "我沒聽清楚，你可以再說一次嗎？",
+      "expect": {
+        "strategy": "釐清",
+        "branch": "B1"
+      },
+      "hard": true
+    },
+    {
+      "id": 7,
+      "input": "其他人覺得呢？要先算什麼？",
+      "expect": {
+        "strategy_in": [
+          "轉問",
+          "轉引"
+        ],
+        "branch": "B3"
+      },
+      "hard": true
+    },
+    {
+      "id": 8,
+      "input": "小賢，你覺得小宇說的對嗎？",
+      "expect": {
+        "strategy": "轉問",
+        "branch": "B3"
+      },
+      "hard": true,
+      "note": "參照小宇的答案交給小賢評論＝轉問"
+    },
+    {
+      "id": 9,
+      "input": "你看一下題目的第一個問號，它問的是什麼？",
+      "expect": {
+        "strategy": "提示",
+        "flags": {
+          "returns_to_text": true
+        },
+        "branch": "B4"
+      },
+      "hard": true
+    },
+    {
+      "id": 10,
+      "input": "不對喔，要先算水量。",
+      "expect": {
+        "strategy": "代答",
+        "flags": {
+          "gives_answer": true
+        },
+        "branch": "B5"
+      },
+      "hard": true
+    },
+    {
+      "id": 11,
+      "input": "你是說要先算省下多少公升，對不對？",
+      "expect": {
+        "flags": {
+          "gives_answer": true
+        },
+        "branch": "B5"
+      },
+      "hard": true,
+      "note": "確認句型，但「公升」是小宇沒說過的答案內容"
+    },
+    {
+      "id": 12,
+      "input": "不對喔，你再想想看。",
+      "expect": {
+        "strategy": "反問",
+        "flags": {
+          "is_evaluative": true,
+          "gives_answer": false
+        },
+        "branch": "B6"
+      },
+      "hard": true,
+      "note": "負向樣本：丟回去了，但先下了否定評價"
+    },
+    {
+      "id": 13,
+      "input": null,
+      "llm": false,
+      "expect": {
+        "branch": "WAIT"
+      },
+      "hard": true
+    },
+    {
+      "id": 14,
+      "input": "你是說要先算水費？",
+      "expect": {
+        "strategy_in": [
+          "釐清",
+          "反問"
+        ],
+        "flags": {
+          "gives_answer": false
+        }
+      },
+      "hard": false,
+      "note": "參考指標：確認句（釐清）與回聲問（反問）兩可，只要求不判代答"
+    },
+    {
+      "id": 15,
+      "input": "好，那我們先把桌上的東西收一收。",
+      "expect": {
+        "strategy": "其他",
+        "branch": "RETRY"
+      },
+      "hard": true
+    }
+  ],
+  "gates": [
+    {
+      "name": "第 1–3、12 題反問必中（本卡核心）",
+      "ids": [
+        1,
+        2,
+        3,
+        12
+      ]
+    },
+    {
+      "name": "第 4–5 題深究不可被判成反問",
+      "ids": [
+        4,
+        5
+      ]
+    },
+    {
+      "name": "第 6–9 題釐清／轉問／提示基本辨識",
+      "ids": [
+        6,
+        7,
+        8,
+        9
+      ]
+    },
+    {
+      "name": "第 10–11 題代答必中、第 1 題不可誤判代答",
+      "ids": [
+        10,
+        11,
+        1
+      ]
+    },
+    {
+      "name": "第 13 題 WAIT、第 15 題 RETRY",
+      "ids": [
+        13,
+        15
+      ]
+    }
+  ]
+}

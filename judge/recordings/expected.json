@@ -1,0 +1,35 @@
+{
+  "_note": "錄音清單的期望值。ref 是使用者應該說的話（拿來算 CER）；expect 是判定器應該輸出的東西。judge=false 表示只驗證辨識、不驗證判定。",
+  "items": [
+    { "id": "R01", "group": "A 極短句", "ref": "好，然後", "expect": { "strategy": "深究" } },
+    { "id": "R02", "group": "A 極短句", "ref": "還有沒有", "expect": { "strategy_in": ["轉問", "轉引"], "branch": "B3" } },
+    { "id": "R03", "group": "A 極短句", "ref": "再一次", "expect": { "strategy": "釐清" } },
+    { "id": "R04", "group": "A 極短句", "ref": "為什麼", "expect": { "strategy": "深究" } },
+    { "id": "R05", "group": "A 極短句", "ref": "你從哪裡知道", "expect": { "strategy": "深究" } },
+
+    { "id": "R06", "group": "B 語氣", "ref": "講完整，爸爸買了", "judge": false,
+      "note": "未完成句。只看辨識——拖長的尾音會變成什麼" },
+    { "id": "R07", "group": "B 語氣", "ref": "嗯，那個，你剛剛說的前面三個，是指哪三個", "expect": { "strategy": "深究" },
+      "note": "語助詞與兩處停頓是否被磨平" },
+    { "id": "R08", "group": "B 語氣", "ref": "欸，我不懂", "expect": { "strategy": "釐清" } },
+    { "id": "R09", "group": "B 語氣", "ref": "等一下哦", "judge": false,
+      "note": "喊停，不是理答。只看辨識" },
+
+    { "id": "R10", "group": "C 對照", "ref": "我沒有聽得很清楚，不太懂你的意思，你可以再說一次嗎", "expect": { "strategy": "釐清" },
+      "compare_far_field": 0.21 },
+    { "id": "R11", "group": "C 對照", "ref": "回到題目來，你告訴我前面三個是指什麼", "expect": { "strategy": "深究", "flags": { "returns_to_text": true } },
+      "compare_far_field": 0.27 },
+    { "id": "R12", "group": "C 對照", "ref": "這是你用算式告訴我，可不可以不要用算式，再告訴我一次", "expect": { "strategy": "深究" },
+      "compare_far_field": 0.08 },
+    { "id": "R13", "group": "C 對照", "ref": "你是說條件語句、推論訊息、解題邏輯，對不對", "expect": { "strategy": "代答", "flags": { "gives_answer": true } } },
+
+    { "id": "R14", "group": "D 負向", "ref": "小宇講的我覺得很清楚，有沒有人可以再用你的話幫小宇再講一次", "expect": { "flags": { "is_evaluative": true } },
+      "compare_far_field": 0.12 },
+    { "id": "R15", "group": "D 負向", "ref": "很好，還有沒有其他人", "expect": { "flags": { "is_evaluative": true } } },
+
+    { "id": "R16", "group": "E 反問", "ref": "水費，水費還是水量", "expect": { "strategy_in": ["反問", "釐清"] },
+      "note": "重複的「水費」是反問的成立要件，辨識若磨掉就會改判成提示" },
+    { "id": "R17", "group": "E 等待", "ref": "", "judge": false, "silence": true,
+      "note": "15 秒安靜。辨識應回空字串或近乎空；系統應走 WAIT" }
+  ]
+}

@@ -1,0 +1,205 @@
+{
+  "_note": "情境卡 C01 判定器測試集。題目取自或改寫自 503 公開課真實逐字稿。硬性門檻見 規格_情境卡C01_聽不懂的那句話.md §6。",
+  "cases": [
+    {
+      "id": 1,
+      "input": "我沒有聽得很清楚，不太懂你的意思，你可以再說一次嗎？",
+      "expect": {
+        "strategy": "釐清"
+      },
+      "source": "f1 13:41",
+      "hard": true
+    },
+    {
+      "id": 2,
+      "input": "你所謂的前面三個，是指哪三個？",
+      "expect": {
+        "strategy": "深究"
+      },
+      "source": "f1 14:05 改寫",
+      "hard": true
+    },
+    {
+      "id": 3,
+      "input": "回到題目來，你告訴我前面三個是指什麼？",
+      "expect": {
+        "strategy": "深究",
+        "flags": {
+          "returns_to_text": true
+        }
+      },
+      "source": "f1 14:05",
+      "hard": true
+    },
+    {
+      "id": 4,
+      "input": "有人可以幫他嗎？",
+      "expect": {
+        "strategy_in": [
+          "轉引",
+          "轉問"
+        ],
+        "branch": "B3"
+      },
+      "source": "f1 14:18",
+      "hard": true,
+      "note": "轉引與轉問在本卡都對映 B3（規格 §7），此處只驗證分支正確。實測 gemini-3.7-flash 三次之間在兩者間跳動——句子本身兩可：說『幫他』參照了前一人（轉引），但沒要求複述他的話（轉問）。轉引／轉問的辨別力留待其他卡驗證"
+    },
+    {
+      "id": 5,
+      "input": "我沒有聽得很清楚，你可以再說一次，或者你旁邊的人幫忙說一下？",
+      "expect": {
+        "strategy": "釐清",
+        "secondary_in": [
+          "轉引",
+          "轉問"
+        ]
+      },
+      "source": "f1 13:41",
+      "hard": true,
+      "note": "f1 13:41 原句。開頭自陳沒聽懂→釐清為主，附帶轉引選項。先前截掉開頭導致主次本身就有歧義，已還原"
+    },
+    {
+      "id": 6,
+      "input": "好，然後？",
+      "expect": {
+        "strategy": "深究"
+      },
+      "source": "f1 16:49",
+      "hard": true,
+      "note": "只有三個字的深究"
+    },
+    {
+      "id": 7,
+      "input": "這是你用算式告訴我，可不可以不要用算式，再告訴我一次？",
+      "expect": {
+        "strategy": "深究"
+      },
+      "source": "f2 11:05",
+      "hard": true,
+      "note": "含「再說一次」但要的是新東西，不是釐清"
+    },
+    {
+      "id": 8,
+      "input": "學習單上第一欄寫的是什麼？",
+      "expect": {
+        "strategy": "提示",
+        "flags": {
+          "returns_to_text": true
+        }
+      },
+      "source": "改寫",
+      "hard": true
+    },
+    {
+      "id": 9,
+      "input": "你是說條件語句、推論訊息、解題邏輯對不對？",
+      "expect": {
+        "strategy": "代答",
+        "flags": {
+          "gives_answer": true
+        }
+      },
+      "source": "改寫",
+      "hard": true,
+      "threshold": "gives_answer 必須為 true"
+    },
+    {
+      "id": 10,
+      "input": "小宇講的我覺得很清楚，有沒有人可以再用你的話幫小宇再講一次？",
+      "expect": {
+        "strategy": "轉問",
+        "flags": {
+          "is_evaluative": true
+        }
+      },
+      "source": "f1 14:49 負向樣本",
+      "hard": true,
+      "threshold": "is_evaluative 必須為 true",
+      "note": "2026-09-23 依手冊改定義：把小宇的話交給別人重講＝轉問（原期望轉引）"
+    },
+    {
+      "id": 11,
+      "input": "很好，還有沒有其他人？",
+      "expect": {
+        "strategy": "轉引",
+        "flags": {
+          "is_evaluative": true
+        }
+      },
+      "source": "負向樣本",
+      "hard": true,
+      "threshold": "is_evaluative 必須為 true",
+      "note": "2026-09-23 依手冊改定義：「還有沒有其他人」收集更多想法＝轉引（高原策略）"
+    },
+    {
+      "id": 12,
+      "input": null,
+      "expect": {
+        "strategy": "等待",
+        "branch": "WAIT"
+      },
+      "source": "全程無語音",
+      "llm": false,
+      "note": "由程式處理，不呼叫 LLM"
+    },
+    {
+      "id": 13,
+      "input": "你自己覺得這樣講清楚了嗎？",
+      "expect": {
+        "strategy": "反問",
+        "branch": "RETRY"
+      },
+      "source": "改寫",
+      "hard": true,
+      "threshold": "必須走 RETRY 且不播任何語音，須附示範例"
+    },
+    {
+      "id": 14,
+      "input": "呃……那個……嗯……",
+      "expect": {
+        "strategy_in": [
+          "其他"
+        ],
+        "branch": "RETRY"
+      },
+      "source": "語意不明",
+      "threshold": "必須走 RETRY 且不附示範例"
+    }
+  ],
+  "gates": [
+    {
+      "name": "第 1–8 題基本辨識全對",
+      "ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ]
+    },
+    {
+      "name": "第 9 題 gives_answer 必中",
+      "ids": [
+        9
+      ]
+    },
+    {
+      "name": "第 10、11 題 is_evaluative 必中（負向樣本）",
+      "ids": [
+        10,
+        11
+      ]
+    },
+    {
+      "name": "第 13、14 題必須走 RETRY",
+      "ids": [
+        13,
+        14
+      ]
+    }
+  ]
+}

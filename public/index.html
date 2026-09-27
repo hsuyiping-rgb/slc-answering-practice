@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>理答練功</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<main class="wrap" id="app">
+
+  <nav class="chips picker" id="cardPicker" aria-label="選擇情境卡"></nav>
+
+  <header class="top">
+    <div class="eyebrow" id="cardSubject"></div>
+    <h1 id="cardTitle"></h1>
+    <p class="src" id="cardSource"></p>
+  </header>
+
+  <!-- 一、前情 -->
+  <section class="panel" id="secIntro">
+    <div class="intro" id="introText"></div>
+    <div class="actions">
+      <button class="btn primary" id="btnStart">開始這一回合</button>
+      <span class="hint" id="startHint"></span>
+    </div>
+    <p class="err" id="micErr" hidden></p>
+  </section>
+
+  <!-- 二、學生發話 -->
+  <section class="panel" id="secOpening" hidden>
+    <div class="speaker" id="openingSpeaker"></div>
+    <div class="line" id="openingText"></div>
+    <div class="playing" id="openingPlaying"></div>
+  </section>
+
+  <!-- 三、老師回合 -->
+  <section class="panel teacher" id="secTeacher" hidden>
+    <div class="turn-label">換你了。</div>
+    <div class="elapsed"><span id="elapsed">0</span> 秒</div>
+    <div class="rec-row">
+      <button class="btn stop" id="btnStop"><span class="dot"></span>說完了，停止</button>
+      <p class="redline" id="redline"></p>
+    </div>
+    <p class="hint">不說話也可以。錄音不會因為安靜而自動停止，只有你按下停止才會結束。</p>
+  </section>
+
+  <!-- 四、處理中 -->
+  <section class="panel" id="secBusy" hidden>
+    <div class="busy" id="busyText">正在轉成文字……</div>
+  </section>
+
+  <!-- 手動模擬（?mock=1，本機沒有後端時用） -->
+  <section class="panel mock" id="secMock" hidden>
+    <div class="turn-label">模擬判定（?mock=1）</div>
+    <p class="hint">後端未部署時用這個面板代替 Whisper＋Gemini。等待秒數與靜音閘門仍是真的。</p>
+    <label>老師原話<br><input id="mockText" placeholder="你剛才說了什麼？"></label>
+    <div class="chips" id="mockChips"></div>
+    <label><input type="checkbox" id="mockGives"> gives_answer</label>
+    <label><input type="checkbox" id="mockEval"> is_evaluative</label>
+    <label><input type="checkbox" id="mockLow"> confidence &lt; 0.5</label>
+  </section>
+
+  <!-- 五、回饋 -->
+  <section id="secResult" hidden>
+
+    <div class="panel wait-fb" id="waitFb"></div>
+
+    <div class="panel layer layer1">
+      <div class="layer-tag">第一層　策略辨識</div>
+      <div id="l1"></div>
+    </div>
+
+    <div class="panel layer layer2" id="layer2">
+      <div class="layer-tag">第二層　接下來發生的事</div>
+      <div class="speaker" id="l2Speaker"></div>
+      <div class="line" id="l2Text"></div>
+      <div class="consequence" id="l2Cons"></div>
+      <div class="actions">
+        <button class="btn ghost" id="btnReplay">再聽一次</button>
+        <button class="btn" id="btnContrast">聽聽看另一條路</button>
+      </div>
+      <div class="contrast" id="contrast" hidden>
+        <div class="contrast-head" id="contrastHead"></div>
+        <div class="speaker" id="cSpeaker"></div>
+        <div class="line" id="cText"></div>
+        <div class="consequence" id="cCons"></div>
+      </div>
+    </div>
+
+    <div class="actions center">
+      <button class="btn primary" id="btnAgain">再練一次</button>
+    </div>
+  </section>
+
+  <!-- 六、練習紀錄 -->
+  <section class="panel log" id="secLog">
+    <details>
+      <summary>我的練習紀錄 <span class="count" id="logCount"></span></summary>
+      <div id="logStats"></div>
+      <div class="actions">
+        <button class="btn ghost" id="btnExport">匯出 JSON</button>
+        <button class="btn ghost danger" id="btnClear">清除紀錄</button>
+      </div>
+      <p class="hint">紀錄只存在這台裝置的瀏覽器裡（localStorage），只有判定結果，沒有錄音、沒有逐字文字。</p>
+    </details>
+  </section>
+
+  <footer class="foot" id="closing"></footer>
+</main>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
