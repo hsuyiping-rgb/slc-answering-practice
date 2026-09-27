@@ -20,9 +20,12 @@
 """
 import json
 import os
+import threading
+import time
 import urllib.error
 import urllib.request
 import uuid
+from collections import deque
 
 from firebase_functions import https_fn, options
 from firebase_functions.params import SecretParam
@@ -41,8 +44,23 @@ WHISPER_MODEL = "whisper-large-v3"
 # s2twp：簡→台灣正體＋台灣用語（软件→軟體）。純 Python 實作，雲端不需編譯
 S2TW = OpenCC("s2twp")
 
-MAX_AUDIO_BYTES = 8 * 1024 * 1024     # 約 8 分鐘 opus。單回合用不到，純粹擋濫用
+MAX_AUDIO_BYTES = 4 * 1024 * 1024     # 約 4 分鐘 opus。單回合通常不到 1 分鐘，純粹擋濫用
+MAX_TEXT_CHARS = 500                  # 一句理答轉成文字很少超過 100 字
 HTTP_TIMEOUT = 90
+
+# 用量限制（2026-09-27，repo 公開時加）。三層：
+# 1. max_instances：兩支各最多 5 個執行個體。每個一次處理一個請求、約 1–5 秒，
+#    5 個 ≈ 每分鐘上百次，已超過 Groq 免費層本身的上限，正常使用不會卡在這裡
+# 2. 每個 IP 的次數：只存在記憶體（不寫 log、不進資料庫），執行個體回收就歸零。
+#    上限放寬是因為同一所學校的老師常共用一個對外 IP，研習時幾十人要能同時練。
+#    計數是「每個執行個體」各自算，擋得住單一來源連續猛打，擋不住刻意平行分散的攻擊
+#    ——那要靠 App Check
+# 3. 輸入大小（上面兩個 MAX_*）
+MAX_INSTANCES = 5
+RATE_PER_MIN = 60
+RATE_PER_DAY = 500
+_hits = {}                            # ip -> deque[時間戳]，最多保留 24 小時
+_hits_lock = threading.Lock()
 
 # Groq 走 Cloudflare，預設的 urllib／requests UA 會被擋成 403 error code 1010
 UA = "slc-answering/0.1"
@@ -89,8 +107,37 @@ def _ok(payload):
                              mimetype="application/json")
 
 
+BUSY = "現在練習的人比較多，請等一分鐘再試"
+
+
+def _rate_limited(req):
+    """超過每個 IP 的次數上限就回 429 Response，否則記一筆並回 None。"""
+    # Cloud Run 前面的負載平衡器把真正的來源放在 X-Forwarded-For 第一個
+    ip = (req.headers.get("X-Forwarded-For") or "").split(",")[0].strip() or req.remote_addr or "?"
+    now = time.time()
+    with _hits_lock:
+        q = _hits.setdefault(ip, deque())
+        while q and now - q[0] > 86400:
+            q.popleft()
+        last_min = 0
+        for t in reversed(q):
+            if now - t > 60:
+                break
+            last_min += 1
+        if last_min >= RATE_PER_MIN:
+            return _err(BUSY, 429)
+        if len(q) >= RATE_PER_DAY:
+            return _err("今天這個網路的練習次數已經到上限，明天再來練", 429)
+        q.append(now)
+        if len(_hits) > 5000:                    # 防止大量不同 IP 把記憶體撐大
+            for k in [k for k, v in _hits.items() if not v or now - v[-1] > 86400]:
+                del _hits[k]
+    return None
+
+
 # ------------------------------------------------------------------ 語音辨識
-@https_fn.on_request(cors=CORS, secrets=[GROQ_API_KEY], memory=options.MemoryOption.MB_512)
+@https_fn.on_request(cors=CORS, secrets=[GROQ_API_KEY], memory=options.MemoryOption.MB_512,
+                     max_instances=MAX_INSTANCES)
 def answering_transcribe(req: https_fn.Request) -> https_fn.Response:
     """音訊 → 文字。
 
@@ -99,6 +146,9 @@ def answering_transcribe(req: https_fn.Request) -> https_fn.Response:
     """
     if req.method != "POST":
         return _err("只接受 POST", 405)
+    limited = _rate_limited(req)
+    if limited:
+        return limited
 
     audio = req.get_data()                      # bytes，只在記憶體，不落地
     if not audio:
@@ -126,6 +176,8 @@ def answering_transcribe(req: https_fn.Request) -> https_fn.Response:
         text = (res.get("text") or "").strip()
         segments = res.get("segments")
     except urllib.error.HTTPError as e:
+        if e.code == 429:                        # Groq 免費層的每分鐘／每日額度
+            return _err(BUSY, 429)
         return _err("辨識服務回應 %s" % e.code, 502)
     except Exception:
         return _err("辨識服務無法連線", 502)
@@ -164,7 +216,8 @@ def _call_gemini(system, user):
     return json.loads(d["candidates"][0]["content"]["parts"][0]["text"])
 
 
-@https_fn.on_request(cors=CORS, secrets=[GEMINI_API_KEY], memory=options.MemoryOption.MB_256)
+@https_fn.on_request(cors=CORS, secrets=[GEMINI_API_KEY], memory=options.MemoryOption.MB_256,
+                     max_instances=MAX_INSTANCES)
 def answering_judge(req: https_fn.Request) -> https_fn.Response:
     """老師原話 → 六策略判定 ＋ 分支。
 
@@ -173,6 +226,9 @@ def answering_judge(req: https_fn.Request) -> https_fn.Response:
     """
     if req.method != "POST":
         return _err("只接受 POST", 405)
+    limited = _rate_limited(req)
+    if limited:
+        return limited
 
     body = req.get_json(silent=True) or {}
     text = (body.get("text") or "").strip()
@@ -182,13 +238,15 @@ def answering_judge(req: https_fn.Request) -> https_fn.Response:
     if not text:
         # 全程無語音由前端直接判 WAIT，不該打到這裡；防呆用
         return _ok({"strategy": "等待", "branch_id": "WAIT", "confidence": 1.0})
-    if len(text) > 2000:
+    if len(text) > MAX_TEXT_CHARS:
         return _err("輸入過長")
 
     got, span_ok = None, False
     for _ in range(2):                           # 子字串驗證不過就重試一次
         try:
             got = _call_gemini(JUDGE_PROMPTS[card], text)
+        except urllib.error.HTTPError as e:
+            return _err(BUSY, 429) if e.code == 429 else _err("判定服務無法連線", 502)
         except Exception:
             return _err("判定服務無法連線", 502)
         span_ok = evidence_ok(got.get("evidence_span"), text)
